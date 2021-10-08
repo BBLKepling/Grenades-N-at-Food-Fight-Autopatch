@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Patch>
+  <Operation Class="XmlExtensions.FindMod">
+    <mods>
+        <li>VanillaExpanded.VBrewE</li>
+    </mods>
+    <packageId>true</packageId>
+
+    <caseTrue>
+
+    <Operation Class="XmlExtensions.FindMod">
+    <mods>
+        <li>CETeam.CombatExtended</li>
+    </mods>
+    <packageId>true</packageId>
+
+        <!-- == Combat Extended == -->
+
+    <caseTrue>
+
+    <Operation Class="PatchOperationSequence">
+      <operations>
+
+  <li Class="PatchOperationAdd">
+  <xpath>Defs/ThingDef[defName="VBE_HotCoffee"]/comps</xpath>
+    <value>
+      <li>
+        <compClass>CompEquippable</compClass>
+      </li>
+    </value>
+  </li>
+
+  <li Class="PatchOperationAdd">
+  <xpath>Defs/ThingDef[defName="VBE_HotCoffee"]/statBases</xpath>
+    <value>
+      <AccuracyTouch>0.75</AccuracyTouch>
+      <AccuracyShort>0.55</AccuracyShort>
+      <AccuracyMedium>0.47</AccuracyMedium>
+      <AccuracyLong>0.2</AccuracyLong>
+      <RangedWeapon_Cooldown>2.2</RangedWeapon_Cooldown>
+    </value>
+  </li>
+
+  <li Class="PatchOperationAdd">
+  <xpath>Defs/ThingDef[defName="VBE_HotCoffee"]</xpath>
+    <value>
+     <equipmentType>Primary</equipmentType>
+     <tools>
+       <li Class="CombatExtended.ToolCE">
+         <capacities>
+           <li>Blunt</li>
+         </capacities>
+         <power>2</power>
+         <cooldownTime>1.5</cooldownTime>
+         <armorPenetrationBlunt>0.5</armorPenetrationBlunt>
+       </li>
+     </tools>
+    </value>
+  </li>
+
+  <li Class="PatchOperationAdd">
+  <xpath>Defs</xpath>
+    <value>
+      <ThingDef ParentName="BaseProjectileNeolithic">
+        <defName>Throwing_HotCoffee</defName>
+        <label>hot coffee</label>
+        <graphicData>
+          <texPath>Projectiles/Coffee/Coffee</texPath>
+          <graphicClass>Graphic_Single</graphicClass>
+        </graphicData>
+        <projectile Class="CombatExtended.ProjectilePropertiesCE">
+          <damageDef>Burn</damageDef>
+          <damageAmountBase>5</damageAmountBase>
+          <armorPenetrationBlunt>3.12</armorPenetrationBlunt>
+          <dropsCasings>false</dropsCasings>
+          <flyOverhead>false</flyOverhead>
+        </projectile>
+      </ThingDef>
+    </value>
+  </li>
+
+        <li Class="CombatExtended.PatchOperationMakeGunCECompatible">
+          <defName>VBE_HotCoffee</defName>
+          <statBases>
+            <Mass>0.03</Mass>
+            <Bulk>0.25</Bulk>
+            <MarketValue>1.1</MarketValue>
+            <SightsEfficiency>1</SightsEfficiency>
+            <RangedWeapon_Cooldown>1</RangedWeapon_Cooldown>
+          </statBases>
+          <Properties>
+            <label>throw hot coffee</label>
+            <verbClass>CombatExtended.Verb_ShootCEOneUse</verbClass>
+            <hasStandardCommand>true</hasStandardCommand>
+            <defaultProjectile>Throwing_HotCoffee</defaultProjectile>
+            <range>10</range>
+            <warmupTime>1.8</warmupTime>
+            <soundCast>ThrowGrenade</soundCast>
+            <noiseRadius>4</noiseRadius>
+            <ai_IsBuildingDestroyer>false</ai_IsBuildingDestroyer>
+          </Properties>
+        </li>
+
+      </operations>
+      </Operation>
+      </caseTrue>
+
+        <!-- == Vanilla == -->
+
+      <caseFalse>
+      <Operation Class="PatchOperationSequence">
+      <operations>
+
+
+  <li Class="PatchOperationAdd">
+  <xpath>Defs/ThingDef[defName="VBE_HotCoffee"]/comps</xpath>
+    <value>
+      <li>
+        <compClass>CompEquippable</compClass>
+      </li>
+    </value>
+  </li>
+
+  <li Class="PatchOperationAdd">
+  <xpath>Defs/ThingDef[defName="VBE_HotCoffee"]/statBases</xpath>
+    <value>
+      <AccuracyTouch>0.75</AccuracyTouch>
+      <AccuracyShort>0.55</AccuracyShort>
+      <AccuracyMedium>0.47</AccuracyMedium>
+      <AccuracyLong>0.2</AccuracyLong>
+      <RangedWeapon_Cooldown>2.2</RangedWeapon_Cooldown>
+    </value>
+  </li>
+
+  <li Class="PatchOperationAdd">
+  <xpath>Defs/ThingDef[defName="VBE_HotCoffee"]</xpath>
+    <value>
+     <equipmentType>Primary</equipmentType>
+     <verbs>
+      <li>
+        <verbClass>Verb_ShootOneUse</verbClass>
+        <hasStandardCommand>true</hasStandardCommand>
+        <defaultProjectile>Throwing_HotCoffee</defaultProjectile>
+        <warmupTime>1.8</warmupTime>
+        <range>14.9</range>
+        <soundCast>ThrowGrenade</soundCast>
+      </li>
+     </verbs>
+     <tools>
+      <li>
+        <label>coffee</label>
+        <capacities>
+          <li>Blunt</li>
+          <li>Poke</li>
+        </capacities>
+        <power>2</power>
+        <cooldownTime>2</cooldownTime>
+      </li>
+     </tools>
+    </value>
+  </li>
+
+  <li Class="PatchOperationAdd">
+  <xpath>Defs</xpath>
+    <value>
+      <ThingDef ParentName="BaseProjectileNeolithic">
+        <defName>Throwing_HotCoffee</defName>
+        <label>hot coffee</label>
+        <graphicData>
+          <texPath>Projectiles/Coffee/Coffee</texPath>
+          <graphicClass>Graphic_Single</graphicClass>
+        </graphicData>
+        <projectile>
+          <flyOverhead>false</flyOverhead>
+          <damageDef>Burn</damageDef>
+          <damageAmountBase>2</damageAmountBase>
+          <arcHeightFactor>1.5</arcHeightFactor>
+          <shadowSize>0.5</shadowSize>
+          <speed>12</speed>
+        </projectile>
+      </ThingDef>
+    </value>
+  </li>
+
+      </operations>
+      </Operation>
+      </caseFalse>
+
+  </Operation>
+  </caseTrue>
+  </Operation>
+</Patch>

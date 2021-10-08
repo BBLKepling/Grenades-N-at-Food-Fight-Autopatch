@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Patch>
+
+    <Operation Class="XmlExtensions.FindMod">
+    <mods>
+        <li>CETeam.CombatExtended</li>
+    </mods>
+    <packageId>true</packageId>
+
+        <!-- == Combat Extended == -->
+
+    <caseTrue>
+
+    <Operation Class="PatchOperationSequence">
+      <operations>
+
+        <!-- == Start Loop == -->
+
+        <!-- == Collect Xpath and Variables == -->
+
+<li Class="XmlExtensions.ForEach">
+  <xpath>Defs/ThingDef[@ParentName="PlantFoodRawBase"]</xpath>
+  <storeIn>Loop_Xpath</storeIn><!-- ======  -->
+  <apply>
+
+  <Operation Class="PatchOperationConditional">
+    <xpath>{Loop_Xpath}/graphicData/texPath</xpath>
+
+  <match Class="PatchOperationConditional">
+    <xpath>{Loop_Xpath}/defName</xpath>
+
+  <match Class="PatchOperationConditional">
+    <xpath>{Loop_Xpath}/label</xpath>
+
+  <match Class="XmlExtensions.CreateVariable">
+    <storeIn>Loop_graphicPath</storeIn><!-- ======  -->
+    <value>{Loop_Xpath}/graphicData/texPath</value>
+    <fromXml>true</fromXml>
+  <apply>
+
+  <Operation Class="XmlExtensions.CreateVariable">
+    <storeIn>Loop_defName</storeIn><!-- ====== -->
+    <value>{Loop_Xpath}/defName</value>
+    <fromXml>true</fromXml>
+  <apply>
+
+  <Operation Class="XmlExtensions.CreateVariable">
+    <storeIn>Loop_label</storeIn><!-- ======  -->
+    <value>{Loop_Xpath}/label</value>
+    <fromXml>true</fromXml>
+  <apply>
+
+        <!-- == Start Patches == -->
+
+  <Operation Class="PatchOperationConditional">
+    <xpath>{Loop_Xpath}/comps</xpath>
+    <nomatch Class="PatchOperationAdd">
+        <xpath>{Loop_Xpath}</xpath>
+        <value>
+         <comps>
+          <li>
+            <compClass>CompEquippable</compClass>
+          </li>
+         </comps>
+        </value>
+    </nomatch>
+    <match Class="PatchOperationAdd">
+        <xpath>{Loop_Xpath}/comps</xpath>
+        <value>
+          <li>
+            <compClass>CompEquippable</compClass>
+          </li>
+        </value>
+    </match>
+  </Operation>
+
+  <Operation Class="XmlExtensions.PatchOperationSafeAdd">
+  <xpath>{Loop_Xpath}</xpath>
+    <value>
+     <techLevel>Neolithic</techLevel>
+     <equipmentType>Primary</equipmentType>
+     <tools>
+       <li Class="CombatExtended.ToolCE">
+         <capacities>
+           <li>Blunt</li>
+         </capacities>
+         <power>2</power>
+         <cooldownTime>1.5</cooldownTime>
+         <armorPenetrationBlunt>0.5</armorPenetrationBlunt>
+       </li>
+     </tools>
+     <statBases>
+      <AccuracyTouch>0.75</AccuracyTouch>
+      <AccuracyShort>0.55</AccuracyShort>
+      <AccuracyMedium>0.47</AccuracyMedium>
+      <AccuracyLong>0.2</AccuracyLong>
+      <RangedWeapon_Cooldown>2.2</RangedWeapon_Cooldown>
+     </statBases>
+    </value>
+  </Operation>
+
+  <Operation Class="PatchOperationAdd">
+  <xpath>Defs</xpath>
+    <value>
+      <ThingDef ParentName="BaseProjectileNeolithic">
+        <defName>Throwing_{Loop_defName}</defName>
+        <label>{Loop_label}</label>
+        <graphicData>
+          <texPath>{Loop_graphicPath}</texPath>
+          <graphicClass>Graphic_Single</graphicClass>
+        </graphicData>
+        <projectile Class="CombatExtended.ProjectilePropertiesCE">
+          <damageDef>Blunt</damageDef>
+          <damageAmountBase>5</damageAmountBase>
+          <armorPenetrationBlunt>3.12</armorPenetrationBlunt>
+          <dropsCasings>false</dropsCasings>
+          <flyOverhead>false</flyOverhead>
+        </projectile>
+      </ThingDef>
+    </value>
+  </Operation>
+
+        <Operation Class="CombatExtended.PatchOperationMakeGunCECompatible">
+          <defName>{Loop_defName}</defName>
+          <statBases>
+            <Mass>0.03</Mass>
+            <Bulk>0.25</Bulk>
+            <MarketValue>1.1</MarketValue>
+            <SightsEfficiency>1</SightsEfficiency>
+            <RangedWeapon_Cooldown>1</RangedWeapon_Cooldown>
+          </statBases>
+          <Properties>
+            <label>throw {Loop_label}</label>
+            <verbClass>CombatExtended.Verb_ShootCEOneUse</verbClass>
+            <hasStandardCommand>true</hasStandardCommand>
+            <defaultProjectile>Throwing_{Loop_defName}</defaultProjectile>
+            <range>10</range>
+            <warmupTime>1.8</warmupTime>
+            <soundCast>ThrowGrenade</soundCast>
+            <noiseRadius>4</noiseRadius>
+            <ai_IsBuildingDestroyer>false</ai_IsBuildingDestroyer>
+          </Properties>
+        </Operation>
+
+        <!-- == End Patches == -->
+
+  </apply>
+  </Operation>
+
+  </apply>
+  </Operation>
+
+  </apply>
+  </match>
+
+  </match>
+
+  </match>
+
+  </Operation>
+
+  </apply>
+</li>
+
+  <li Class="XmlExtensions.FindMod">
+    <mods>
+        <li>sarg.alphabiomes</li>
+    </mods>
+    <packageId>true</packageId>
+    <caseTrue> 
+      <Operation Class="PatchOperationReplace">
+      <xpath>Defs/ThingDef[defName="Throwing_AB_BumbledroneFood"]/graphicData/texPath</xpath>
+        <value>
+          <texPath>Things/Item/Resource/PlantFoodRaw/Potatoes</texPath>
+        </value>
+      </Operation>
+    </caseTrue>
+  </li>
+
+        <!-- == End Loop == -->
+
+      </operations>
+      </Operation>
+      </caseTrue>
+
+        <!-- == Vanilla == -->
+
+      <caseFalse>
+      <Operation Class="PatchOperationSequence">
+      <operations>
+
+        <!-- == Start Loop == -->
+
+        <!-- == Collect Xpath and Variables == -->
+
+<li Class="XmlExtensions.ForEach">
+  <xpath>Defs/ThingDef[@ParentName="PlantFoodRawBase"]</xpath>
+  <storeIn>Loop_Xpath</storeIn><!-- ======  -->
+  <apply>
+
+  <Operation Class="PatchOperationConditional">
+    <xpath>{Loop_Xpath}/graphicData/texPath</xpath>
+
+  <match Class="PatchOperationConditional">
+    <xpath>{Loop_Xpath}/defName</xpath>
+
+  <match Class="PatchOperationConditional">
+    <xpath>{Loop_Xpath}/label</xpath>
+
+  <match Class="XmlExtensions.CreateVariable">
+    <storeIn>Loop_graphicPath</storeIn><!-- ======  -->
+    <value>{Loop_Xpath}/graphicData/texPath</value>
+    <fromXml>true</fromXml>
+  <apply>
+
+  <Operation Class="XmlExtensions.CreateVariable">
+    <storeIn>Loop_defName</storeIn><!-- ====== -->
+    <value>{Loop_Xpath}/defName</value>
+    <fromXml>true</fromXml>
+  <apply>
+
+  <Operation Class="XmlExtensions.CreateVariable">
+    <storeIn>Loop_label</storeIn><!-- ======  -->
+    <value>{Loop_Xpath}/label</value>
+    <fromXml>true</fromXml>
+  <apply>
+
+        <!-- == Start Patches == -->
+
+  <Operation Class="PatchOperationConditional">
+    <xpath>{Loop_Xpath}/comps</xpath>
+    <nomatch Class="PatchOperationAdd">
+        <xpath>{Loop_Xpath}</xpath>
+        <value>
+         <comps>
+          <li>
+            <compClass>CompEquippable</compClass>
+          </li>
+         </comps>
+        </value>
+    </nomatch>
+    <match Class="PatchOperationAdd">
+        <xpath>{Loop_Xpath}/comps</xpath>
+        <value>
+          <li>
+            <compClass>CompEquippable</compClass>
+          </li>
+        </value>
+    </match>
+  </Operation>
+
+  <Operation Class="XmlExtensions.PatchOperationSafeAdd">
+  <xpath>{Loop_Xpath}</xpath>
+    <value>
+     <techLevel>Neolithic</techLevel>
+     <equipmentType>Primary</equipmentType>
+     <verbs>
+      <li>
+        <verbClass>Verb_ShootOneUse</verbClass>
+        <hasStandardCommand>true</hasStandardCommand>
+        <defaultProjectile>Throwing_{Loop_defName}</defaultProjectile>
+        <warmupTime>1.8</warmupTime>
+        <range>14.9</range>
+        <soundCast>ThrowGrenade</soundCast>
+      </li>
+     </verbs>
+     <tools>
+      <li>
+        <label>{Loop_label}</label>
+        <capacities>
+          <li>Blunt</li>
+          <li>Poke</li>
+        </capacities>
+        <power>2</power>
+        <cooldownTime>2</cooldownTime>
+      </li>
+     </tools>
+     <statBases>
+      <AccuracyTouch>0.75</AccuracyTouch>
+      <AccuracyShort>0.55</AccuracyShort>
+      <AccuracyMedium>0.47</AccuracyMedium>
+      <AccuracyLong>0.2</AccuracyLong>
+      <RangedWeapon_Cooldown>2.2</RangedWeapon_Cooldown>
+     </statBases>
+    </value>
+  </Operation>
+
+        <!-- == Optional Verb Patch, links to setting after loop == -->
+
+  <Operation Class="XmlExtensions.OptionalPatch">
+    <modId>GNAT_FoodFight</modId>
+    <key>Loop_Verb</key>
+    <defaultValue>false</defaultValue>
+    <caseTrue>
+        <Operation Class="PatchOperationReplace">
+          <xpath>{Loop_Xpath}/verbs/li/verbClass</xpath>
+          <value>
+            <verbClass>Verb_LaunchProjectile</verbClass>
+          </value>
+        </Operation>
+    </caseTrue>
+  </Operation>
+
+  <Operation Class="PatchOperationAdd">
+  <xpath>Defs</xpath>
+    <value>
+      <ThingDef ParentName="BaseProjectileNeolithic">
+        <defName>Throwing_{Loop_defName}</defName>
+        <label>{Loop_label}</label>
+        <graphicData>
+          <texPath>{Loop_graphicPath}</texPath>
+          <graphicClass>Graphic_Single</graphicClass>
+        </graphicData>
+        <projectile>
+          <flyOverhead>false</flyOverhead>
+          <damageDef>Blunt</damageDef>
+          <damageAmountBase>2</damageAmountBase>
+          <arcHeightFactor>1.5</arcHeightFactor>
+          <shadowSize>0.5</shadowSize>
+          <speed>12</speed>
+        </projectile>
+      </ThingDef>
+    </value>
+  </Operation>
+
+        <!-- == End Patches == -->
+
+  </apply>
+  </Operation>
+
+  </apply>
+  </Operation>
+
+  </apply>
+  </match>
+
+  </match>
+
+  </match>
+
+  </Operation>
+
+  </apply>
+</li>
+
+        <!-- == End Loop == -->
+
+        <!-- == Bug Fixes for Stacking Foods == -->
+
+<li Class="XmlExtensions.FindMod">
+    <mods>
+        <li>BiomesTeam.Oasis</li>
+    </mods>
+    <packageId>true</packageId>
+    <caseTrue> 
+      <Operation Class="PatchOperationReplace">
+      <xpath>Defs/ThingDef[defName="Throwing_BMT_DuneDelight"]/graphicData/texPath</xpath>
+        <value>
+          <texPath>Things/Item/Resource/PlantFoodRaw/Potatoes</texPath>
+        </value>
+      </Operation>
+    </caseTrue>
+</li>
+
+<li Class="XmlExtensions.FindMod">
+    <mods>
+        <li>sarg.alphabiomes</li>
+    </mods>
+    <packageId>true</packageId>
+    <caseTrue> 
+      <Operation Class="PatchOperationReplace">
+      <xpath>Defs/ThingDef[defName="Throwing_AB_BumbledroneFood"]/graphicData/texPath</xpath>
+        <value>
+          <texPath>Things/Item/Resource/PlantFoodRaw/Potatoes</texPath>
+        </value>
+      </Operation>
+    </caseTrue>
+</li>
+
+        <!-- == Optional Verb Setting == -->
+
+<li Class="XmlExtensions.CreateSettings">
+    <modId>GNAT_FoodFight</modId>
+    <label>GNAT Food Fight</label>
+    <settings>
+        <li Class="XmlExtensions.Setting.Checkbox">
+          <key>Loop_Verb</key>
+          <label>Vanilla/Throw Them Compatability Mode (Requires game restart to take effect)</label>
+          <defaultValue>false</defaultValue>
+          <tooltip>Changes verbClass from Verb_ShootOneUse to Verb_LaunchProjectile for vanilla behavior.</tooltip>
+        </li>
+    </settings>
+</li>
+
+      </operations>
+      </Operation>
+      </caseFalse>
+
+        <!-- == End Vanilla == -->
+
+  </Operation>
+</Patch>
